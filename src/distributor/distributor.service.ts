@@ -37,4 +37,17 @@ export class DistributorService {
     async findAll(){
       return this.prisma.distributor.findMany()
     }
+
+    async findByName(name: string): Promise<Distributor | null> {
+      const distributor = await this.prisma.distributor.findUnique({
+        where: { name: name },
+      });
+    
+      if (!distributor) {
+        // Ao invés de lançar erro, retornamos null (como no caso do role)
+        return null;
+      }
+    
+      return distributor
+    }
 }

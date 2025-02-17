@@ -7,5 +7,6 @@ import { DistributorService } from './distributor.service';
   imports: [DatabaseModule],
   controllers: [DistributorController],
   providers: [DistributorService],
+  exports: [DistributorService],
 })
 export class DistributorModule {}

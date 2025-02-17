@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Patch, Delete, Param } from '@nestjs/common';
+import { Body, Controller, Get, Post, Patch, Delete, Param, NotFoundException, BadRequestException } from '@nestjs/common';
 import { Distributor as DistributorModel, Prisma } from '@prisma/client';
 import { DistributorService } from './distributor.service';
 
@@ -38,4 +38,22 @@ export class DistributorController {
   async deleteDistributor(@Param('id') id: string): Promise<DistributorModel> {
     return this.distributorService.deleteDistributor({ id });
   }
+
+  @Get('name/:name')
+  async getDistributorByName(@Param('name') name: string): Promise<{ id: string; name: string; createdAt: Date; updatedAt: Date }> {
+  if (!name) {
+    throw new BadRequestException('Nome do distribuidor é obrigatório!');
+  }
+
+  const distributor = await this.distributorService.findByName(name);
+  
+  if (!distributor) {
+    throw new NotFoundException('Distribuidor não encontrado!');
+  }
+
+  return distributor;
+}
+
+
+
 }

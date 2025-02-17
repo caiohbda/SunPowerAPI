@@ -39,4 +39,10 @@ export class RoleService {
       console.log("Roles encontrados:", roles);
       return roles;
     }
+
+    async findByName(name: string): Promise<Role | null> {
+        return this.prisma.role.findUnique({
+          where: { name },
+        });
+      }
 }
