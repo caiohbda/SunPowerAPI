@@ -10,9 +10,10 @@ import { DistributorModule } from './distributor/distributor.module';
 import { RoleModule } from './role/role.module';
 import { AddressesModule } from './addresses/addresses.module';
 import { ContractsModule } from './contracts/contracts.module';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
-  imports: [AuthModule, UserModule, DatabaseModule, DistributorModule, RoleModule, AddressesModule, ContractsModule],
+  imports: [AuthModule, UserModule, DatabaseModule, DistributorModule, RoleModule, AddressesModule, ContractsModule, ReportsModule],
   controllers: [AppController, DistributorController],
   providers: [AppService, DistributorService],
 })
