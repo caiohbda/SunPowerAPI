@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Contract {
+  id            String    @id @default(uuid())
+  code          String
+
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+
+  historics     Historic[]
+  reports       Report[]
+
+  addressId     String? @unique
+  address       Address?  @relation(fields: [addressId], references: [id], onDelete: Cascade)
+
+  lastRefMonth  String?
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Distributor {
+  id       String  @id @default(uuid())
+  name     String  @unique
+  users    User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Historic {
+  id           String   @id @default(uuid())
+  month        DateTime
+  consumption  Float
+  economy      Decimal
+
+  codeClientId String
+  codeClient   Contract @relation(fields: [codeClientId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Address {
+  id           String    @id @default(uuid())
+  category     String
+  street       String
+  number       String
+  complement   String
+  cep          String
+  neighborhood String
+  city         String
+  state        String
+
+  contract     Contract?
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model User {
+  id          String      @id @default(uuid())
+  name        String
+  email       String      @unique
+  password    String
+  discount    Float
+  status      String
+
+  contracts   Contract[]
+
+  roleId      String?
+  role        Role?       @relation(fields: [roleId], references: [id])
+
+  distributorId String?
+  distributor  Distributor? @relation(fields: [distributorId], references: [id])
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  Role Role[] @relation("UserRole")
+}
+
+model Report {
+  id                    String  @id @default(uuid())
+  codeClientId          String
+  codeClient            Contract @relation(fields: [codeClientId], references: [id], onDelete: Cascade)
+
+  ref_month             String
+  due_date             String
+  value_celpe          Decimal
+  credits              Decimal
+  previous_reading     Decimal
+  current_reading      Decimal
+  energy_consumed      Decimal
+  value_without_discount Decimal
+  value_with_discount  Decimal
+  price_final          Decimal
+  value_economy        Decimal
+  billed_consumption   Decimal
+  tusd                Decimal
+  te                  Decimal
+  paid_out            Boolean  @default(false)
+
+  flag_name           String
+  flag_value          Decimal
+
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+}
+
+model Role {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  users       User[]  @relation("UserRole")
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  User User[]
+}
