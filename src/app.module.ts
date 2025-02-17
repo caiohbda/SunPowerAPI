@@ -8,9 +8,11 @@ import { DistributorService } from './distributor/distributor.service';
 import { DistributorController } from './distributor/distributor.controller';
 import { DistributorModule } from './distributor/distributor.module';
 import { RoleModule } from './role/role.module';
+import { AddressesModule } from './addresses/addresses.module';
+import { ContractsModule } from './contracts/contracts.module';
 
 @Module({
-  imports: [AuthModule, UserModule, DatabaseModule, DistributorModule, RoleModule],
+  imports: [AuthModule, UserModule, DatabaseModule, DistributorModule, RoleModule, AddressesModule, ContractsModule],
   controllers: [AppController, DistributorController],
   providers: [AppService, DistributorService],
 })
